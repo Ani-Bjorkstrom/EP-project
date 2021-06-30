@@ -1,4 +1,6 @@
-
+import { floor } from 'react-native-reanimated';
+//import * as MediaLibrary from 'expo-media-library';
+//import * as Permissions from 'expo-permissions';
         /*
         fetchDistanceBetweenPoints = (lat1, lng1, lat2, lng2) => {
             let urlToFetchDistance = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins='+lat1+','+lng1+'&destinations='+lat2+'%2C'+lng2+'&key=' + 'AIzaSyBZcm6gFaJcSEmLrddFuSw6gQCC0QRn1ZI'; 
