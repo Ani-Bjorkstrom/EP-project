@@ -7,6 +7,7 @@ import { getDistance } from 'geolib';
 import { floor } from 'react-native-reanimated';
 //import * as MediaLibrary from 'expo-media-library';
 let cities = appJson.cities;
+let cityNames = cities.map(item =>((item.name) + ' -')); 
 
 
 let curLat, curLong;
@@ -84,8 +85,12 @@ const EpCities = (props) => {
 
         render() {
             this.findCurrentLocationAsync();
-            
+            let cityDistance = []
+            console.log(cityNames);
             let distance = longLat.map(item => (getDistance(this.state.curLongLat, item)));
+            for (let i = 0; i < distance.length; i++ ){
+                cityDistance.push([cityNames[i] + ' ' + distance[i]/1000 + 'km']);
+            }
             //const distance = getDistance(this.state.curLongLat, longLat);
             console.log(distance);
             //this.calDistance();
@@ -98,10 +103,9 @@ const EpCities = (props) => {
             return (
                 <View>
                     
-                        <Text>My location</Text>
-                        <EpCities name = {cities.name} />
-                        {cities.map(item =>(<Text>{(item.name) + ' -'}</Text>))} 
-                        {distance.map(item=>(<Text>{(item/1000) + ' km'}</Text>))}
+                        <Text>My distance from EP cities</Text>
+                        {cityDistance.map(item => (<Text>{(item)}</Text>))}
+
 
 
                 </View>

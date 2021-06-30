@@ -172,3 +172,15 @@ import React, { useState, useEffect } from 'react';
                 console.log(c);
                 console.log(d);
         }
+
+        return (
+            <View>
+                
+                    <Text>My distance from EP cities</Text>
+                    //<EpCities name = {cities.name} />
+                    {cityDistance.map(item => (<Text>{(item)}</Text>))}
+                    //{cities.map(item =>(<Text>{(item.name) + ' -' }</Text>))} 
+                    //{distance.map(item=>(<Text>{(item/1000) + ' km'}</Text>))}
+
+
+            </View>
