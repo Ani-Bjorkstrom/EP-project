@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View, Platform, StyleSheet } from 'react-native';
+import { Text, View, Platform, StyleSheet, Button, Linking, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import * as appJson from './data.json';
 import { getDistance } from 'geolib';
+import MapView from 'react-native-maps';
+
 let cities = appJson.cities;
+
 
 //returns an array with city names -
 let cityNames = cities.map(item => ((item.name) + ' -')); 
@@ -66,15 +69,11 @@ const EpCities = (props) => {
         };  
 
 
-//Click event that doesn't work
-        showMap = () => {
-            <Text>Hi</Text>
-        }
 
         render() {
 
             //Sets the value for locations 
-            this.findCurrentLocationAsync();
+            //this.findCurrentLocationAsync();
             //Creates an empathy array
             let cityDistance = []
             //Creates an array that involves distances
@@ -87,16 +86,33 @@ const EpCities = (props) => {
 
             
             return (
-                <View>
-                    
-                        <Text>My distance from EP cities</Text>
-                        {cityDistance.map(item => (<Text key={item[0]} onClick={this.showMap}>{(item)}</Text>))}
 
+                <View>
+
+                        <Button onPress={this.findCurrentLocationAsync} 
+                         title = "My distance from EP cities" color="#841584"/>
+
+                        {cityDistance.map(item => (<Text onPress={ ()=> Linking.openURL('https://google.com') } key={item[0]}>{(item)}</Text>))}
+                        <MapView style={styles.map} />
 
                 </View>
+
             );
         }
     }
+
+    const styles = StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: '#fff',
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        map: {
+          width: Dimensions.get('window').width,
+          height: Dimensions.get('window').height,
+        },
+      });
 
    //default means that only FindMe can be exported from this module 
     export default FindMe;
