@@ -186,3 +186,195 @@ import React, { useState, useEffect } from 'react';
 
 
             </View>
+/*
+<MapView>
+<Polyline
+    coordinates={[
+        {latitude: 17.97791823188437, longitude: 59.31329989421945},
+        {latitude: 18.00487876058698, longitude: 59.31890230426627},
+        {latitude: 18.02793799398348, longitude: 59.31364854460676},
+        {latitude: 18.07942264600009, longitude: 59.30229813459571},
+        {latitude: 18.08595488372055, longitude: 59.29851748938571},
+        {latitude: 18.10585155135719, longitude: 59.29936946846362}
+    ]}
+    strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+    strokeColors={[
+        '#7F0000',
+        '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+        '#B24112',
+        '#E5845C',
+        '#238C23',
+        '#7F0000'
+    ]}
+    strokeWidth={6}
+/>
+
+</MapView> 
+
+                                {latitude: 17.97791823188437, longitude: 59.31329989421945},
+                                {latitude: 18.00487876058698, longitude: 59.31890230426627},
+                                {latitude: 18.02793799398348, longitude: 59.31364854460676},
+                                {latitude: 18.07942264600009, longitude: 59.30229813459571},
+                                {latitude: 18.08595488372055, longitude: 59.29851748938571},
+                                {latitude: 18.10585155135719, longitude: 59.29936946846362}
+
+*/
+
+//Doing it in google
+
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import { Component } from 'react/cjs/react.production.min';
+import { styleSheets } from 'min-document';
+
+export default class App extends Component {
+    render(){
+        return(
+            <View>
+                <MapView
+                provider = {PROVIDER_GOOGLE}
+                style = {styleSheets.map}
+                initialRegion = 
+            </View>
+        )
+    }
+}
+
+                
+                /*
+                {latitude: 17.97791823188437, longitude: 59.31329989421945},
+                {latitude: 18.00487876058698, longitude: 59.31890230426627},
+                {latitude: 18.02793799398348 , longitude: 59.31364854460676},
+                {latitude: 18.07942264600009, longitude: 59.30229813459571},
+                {latitude: 18.08595488372055, longitude: 59.29851748938571},
+                {latitude: 18.10585155135719, longitude: 59.29936946846362}
+                */
+               </View>
+
+
+
+               {latitude: 59.31329989421945, longitude: 17.97791823188437},
+                {latitude: 59.31890230426627, longitude: 18.00487876058698},
+                {latitude: 59.31364854460676, longitude: 18.02793799398348},
+                {latitude: 59.30229813459571, longitude: 18.07942264600009},
+                {latitude: 59.29851748938571, longitude: 18.08595488372055},
+                {latitude: 59.29936946846362, longitude: 18.10585155135719},
+
+                {latitude: 59.30419602178423, longitude: 18.11721389794955},
+                {latitude: 59.31687564733727, longitude: 18.11106729310467},
+                {latitude: 59.32171481190725, longitude: 18.07720428503221},
+                {latitude: 59.30229813459571, longitude: 18.07942264600009},
+                {latitude: 59.32907204878743, longitude: 18.08406402837167},
+                {latitude: 59.32906900667979, longitude: 18.10461656034975}
+
+                class FindMe extends Component {
+        
+                    //in states program saves property values that belong to the component, when state object changes component re-renders
+                    state = {
+                        errorMessage: '',
+                        location: {},
+                        curLongLat: {},
+                        polygon: [17.97791823188437, 59.31329989421945, 18.00487876058698, 59.31890230426627, 18.02793799398348, 59.31364854460676]           
+                        };   
+                
+                    findCurrentLocationAsync = async () => {
+                        let permissionStatus = null;
+                        //promise which in this case is Permissions.askAsync fullfills, the value will be returned and saved in status
+                        let { status } = await Location.requestForegroundPermissionsAsync();
+                        permissionStatus = status;
+                        if (permissionStatus !== 'granted'){
+                            this.setState({
+                                errorMessage: 'Permission to access location was denied'
+                                });
+                                console.log("Permission to access location was denied")
+                        } else {
+                            const location = await Location.getCurrentPositionAsync({});
+                            let curLat = location.coords.latitude;
+                            let curLong = location.coords.longitude;
+                
+                            let curLongLat = {latitude: curLat, longitude: curLong}; 
+                            
+                            let polygon = [
+                                17.97791823188437, 59.31329989421945, 18.00487876058698, 59.31890230426627, 18.02793799398348, 59.31364854460676
+                            ]
+                            
+            
+                        this.setState({ 
+                            location,
+                            curLongLat,
+                            polygon
+                            })
+                        };    
+                    };  
+            
+            
+            
+                    render() {
+                        //const { polygon } = this.state.polygon;
+                        //Sets the value for locations 
+                        //this.findCurrentLocationAsync();
+                        //Creates an empathy array
+                        let cityDistance = []
+                        //Creates an array that involves distances
+                        let distance = longLat.map(item => (getDistance(this.state.curLongLat, item)));
+                        //Returns an array that consists of arrays that includes city name and distance from the current location
+                        for (let i = 0; i < distance.length; i++ ){
+                            cityDistance.push([cityNames[i] + ' ' + distance[i]/1000 + 'km']);
+                        }
+            
+            
+                        
+                        return (
+            
+                            
+            
+                            <View>
+                                <MapView
+            
+                                 style={styles.map}
+                                 /*
+                                 initialRegion={{
+                                    //automate it
+                                    latitude: 37.78825,
+                                    longitude: -122.4324,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,  
+                                  }}
+                                  */>
+            
+                                    <MapView.Polygon coordinates= {this.state.polygon}
+                                    
+                                        fillColor="rgba(0, 200, 0, 0.5)"
+                                        strokeColor="red"
+                                        strokeWidth={2}
+                                        />
+                                </MapView>   
+                                    <Button onPress={this.findCurrentLocationAsync} 
+                                     title = "My distance from EP cities" color="#841584"/>
+                                     
+                                    {cityDistance.map(item => (<Text onPress={ ()=> Linking.openURL('https://google.com') } key={item[0]}>{(item)}</Text>))}
+            
+            
+                            </View>
+            
+                        );
+                    }
+                }
+            
+                const styles = StyleSheet.create({
+                    container: {
+                      flex: 1,
+                      backgroundColor: '#fff',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    },
+                    map: {
+                      width: Dimensions.get('window').width,
+                      height: 200,
+                    },
+                  });
+            
+               //default means that only FindMe can be exported from this module 
+                export default FindMe;
+            
+                
+               
