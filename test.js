@@ -377,4 +377,37 @@ export default class App extends Component {
                 export default FindMe;
             
                 
+                          //let Points = cities.map(item => (item.points.replace(/[',]+/g, ' ')));
+            //console.log(Points[index]);
+            //let clickedPoints = [Points[index]][0].replace(/['"]+/g, '').split(" ").reverse();
+            //console.log(clickedPoints);
+            /*
+            console.log([clickedPoints[index]][0].replace(/['"]+/g, '').split().reverse());
+            console.log(clickedPoints.split().reverse());
+            
+            console.log([Points[index]][0].replace(/['"]+/g, '').replace(/[',]+/g, ' ').replace(/[' ]+/g, ','));
+            
+            let polygon = [
                
+            {longitude: 17.97791823188437, latitude: 59.31329989421945},
+            {longitude: 18.00487876058698, latitude: 59.31890230426627},
+            {longitude: 18.02793799398348, latitude: 59.31364854460676},
+            {longitude: 18.07942264600009, latitude: 59.30229813459571},
+            {longitude: 18.08595488372055, latitude: 59.30229813459571}
+            /*
+            {latitude: 59.31364854460676, longitude: 18.02793799398348},
+            {latitude: 59.30229813459571, longitude: 18.07942264600009},
+            
+            {latitude: 59.29851748938571, longitude: 18.08595488372055},
+            {latitude: 59.29936946846362, longitude: 18.10585155135719},
+
+            {latitude: 59.30419602178423, longitude: 18.11721389794955},
+            {latitude: 59.31687564733727, longitude: 18.11106729310467},
+            {latitude: 59.32171481190725, longitude: 18.07720428503221},
+            {latitude: 59.30229813459571, longitude: 18.07942264600009},
+            {latitude: 59.32907204878743, longitude: 18.08406402837167},
+            {latitude: 59.32906900667979, longitude: 18.10461656034975}
+          
+        
+    ]
+      */ 

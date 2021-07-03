@@ -8,6 +8,13 @@ import { event } from 'react-native-reanimated';
 
 let cities = appJson.cities;
 
+const window = Dimensions.get('window');
+console.log(window);
+const { width, height }  = window;
+const LATITUD_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUD_DELTA * (width / height)
+console.log(window);
+console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
 
 
 
@@ -86,43 +93,10 @@ const EpCities = (props) => {
             let index = cityName.indexOf(clickedCity);
             console.log(index);
             let polygon = 
-            cities[index].points.split(",").map(item=>({longitude: (item.split(" ")[0]).replace(/['"]+/g, ' '), latitude: (item.split(" ")[1]).replace(/['"]+/g, ' ')}))
+            cities[index].points.split(",").map(item=>({longitude: (item.split(" ")[0]).replace(/['"]+/g, ''), latitude: (item.split(" ")[1]).replace(/['"]+/g, '')}))
             
             console.log(cities[index].points.split(",").map(item=>({longitude: item.split(" ")[0], latitude: item.split(" ")[1]})));
-            //let Points = cities.map(item => (item.points.replace(/[',]+/g, ' ')));
-            //console.log(Points[index]);
-            //let clickedPoints = [Points[index]][0].replace(/['"]+/g, '').split(" ").reverse();
-            //console.log(clickedPoints);
-            /*
-            console.log([clickedPoints[index]][0].replace(/['"]+/g, '').split().reverse());
-            console.log(clickedPoints.split().reverse());
-            
-            console.log([Points[index]][0].replace(/['"]+/g, '').replace(/[',]+/g, ' ').replace(/[' ]+/g, ','));
-            
-            let polygon = [
-               
-            {longitude: 17.97791823188437, latitude: 59.31329989421945},
-            {longitude: 18.00487876058698, latitude: 59.31890230426627},
-            {longitude: 18.02793799398348, latitude: 59.31364854460676},
-            {longitude: 18.07942264600009, latitude: 59.30229813459571},
-            {longitude: 18.08595488372055, latitude: 59.30229813459571}
-            /*
-            {latitude: 59.31364854460676, longitude: 18.02793799398348},
-            {latitude: 59.30229813459571, longitude: 18.07942264600009},
-            
-            {latitude: 59.29851748938571, longitude: 18.08595488372055},
-            {latitude: 59.29936946846362, longitude: 18.10585155135719},
 
-            {latitude: 59.30419602178423, longitude: 18.11721389794955},
-            {latitude: 59.31687564733727, longitude: 18.11106729310467},
-            {latitude: 59.32171481190725, longitude: 18.07720428503221},
-            {latitude: 59.30229813459571, longitude: 18.07942264600009},
-            {latitude: 59.32907204878743, longitude: 18.08406402837167},
-            {latitude: 59.32906900667979, longitude: 18.10461656034975}
-          
-        
-    ]
-      */
 
             this.setState({
                 polygon
@@ -153,18 +127,25 @@ const EpCities = (props) => {
 
                 <View>
                     <MapView
-
+                        
                      style={styles.map}
-                     /*
+                     
                      initialRegion={{
                         //automate it
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,  
+                        latitude: 38.91835,
+                        longitude: -6.345305,
+                        latitudeDelta: LATITUD_DELTA,
+                        longitudeDelta: LONGITUDE_DELTA,  
                       }}
-                      */>
-                          
+                       >
+                         <MapView.Circle
+                            center = {{
+                                latitude: 18.005875,
+                                longtitude: 59.339475,
+                            }}
+                            radius = {50000}
+
+                         /> 
                         <MapView.Polygon coordinates={
                             this.state.polygon
                         } 
@@ -194,7 +175,7 @@ const EpCities = (props) => {
         },
         map: {
           width: Dimensions.get('window').width,
-          height: 200,
+          height: Dimensions.get('window').height,
         },
       });
    //default means that only FindMe can be exported from this module 
