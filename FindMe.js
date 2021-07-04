@@ -6,6 +6,7 @@ import { getDistance } from 'geolib';
 import MapView, {Polygon, Polyline} from 'react-native-maps';
 import { event, log } from 'react-native-reanimated';
 
+
 let cities = appJson.cities;
 
 const window = Dimensions.get('window');
@@ -30,29 +31,18 @@ cities.map(item =>(longLat.push({latitude: item.lat, longitude: item.lon})));
 
 
 
-//Returns an array of city lats
-let cityLat = cities.map(item => ( item.lat ));
-//Return an array of city long
-let cityLong = cities.map(item => ( item.lon));
-
-//Creates a property EpCities that returns list of city names
-const EpCities = (props) => {
-    return(
-      cities.map((obj) => (
-        <Text key={obj.name}>{obj.name}{' - '}</Text>     
-     ))
-    )
-}
 //here I use the alternative class suntax
 //creates a class component called FindMe gives the class component a state object, state object can be only created in class constructor
     class FindMe extends Component {
         
         //in states program saves property values that belong to the component, when state object changes component re-renders
         state = {
+            data: [],
             errorMessage: '',
             location: {},
             curLongLat: {},
             polygon: [],
+            clicked: false,
             region: {
                 latitude: 59.339475,
                 longitude: 18.005875,
@@ -61,8 +51,8 @@ const EpCities = (props) => {
             }            
             };   
             
-        findCurrentLocationAsync = async () => {
             
+         findCurrentLocationAsync = async () => {
             let location;
             let permissionStatus = null;
             let curLongLat;
@@ -87,6 +77,7 @@ const EpCities = (props) => {
                 curLongLat = {latitude: curLat, longitude: curLong}; 
                 
             }
+
         
             //Variable that is inserted into state should be globally declared    
             this.setState({ 
@@ -95,6 +86,18 @@ const EpCities = (props) => {
                 
                 }) 
         };  
+
+        getCitiesFromApi = () => {
+            return fetch('https://pgroute-staging.easyparksystem.net/cities')
+                .then((response) => response.json())
+                .then((json) => {
+                this.setState({data: json.cities});
+                })
+                .catch((error) => console.error(error))
+                .finally(() => {
+                this.setState({ isLoading: false });
+                });
+            }
 /*
         showMap = () => {
 
@@ -128,14 +131,15 @@ const EpCities = (props) => {
                 latitudeDelta: LATITUD_DELTA,
                 longitudeDelta: LONGITUDE_DELTA
             }
-            
+            let clicked = true;
             console.log(cities[index].points.split(",").map(item=>({longitude: (item.split(" ")[0]), latitude: (item.split(" ")[1])})));
             console.log(cities[index].points.split(",").map(item=>({longitude: parseFloat(item.split(" ")[0]), latitude: parseFloat(item.split(" ")[1])})));
 
 
             this.setState({
                 polygon,
-                region
+                region,
+                clicked
             })
 }
     
@@ -145,6 +149,7 @@ const EpCities = (props) => {
         render() {
             //const { polygon } = this.state.polygon;
             //Sets the value for locations 
+            //this.getCitiesFromApi();
             //this.findCurrentLocationAsync();
             //Creates an empathy array
             let cityDistance = []
@@ -162,21 +167,11 @@ const EpCities = (props) => {
                 
 
                 <View>
-                    <MapView
+                    {/* Show the map only when city name is clicked */}
+                    {this.state.clicked && <MapView 
                      showsUserLocation= {true}  
                      style={styles.map}
-                     region={this.state.region}
-                     /*
-                     initialRegion={{
-                        //automate it
-                        
-                        latitude: 59.339475,
-                        longitude: 18.005875,
-                        latitudeDelta: LATITUD_DELTA,
-                        longitudeDelta: LONGITUDE_DELTA,  
-                      }}
-                      */
-                       >
+                    region={this.state.region}>
 
                         <MapView.Polygon coordinates={
                             this.state.polygon
@@ -185,11 +180,16 @@ const EpCities = (props) => {
                             strokeColor="red"
                             strokeWidth={2}
                             />
-                    </MapView>   
-                        <Button onPress={this.findCurrentLocationAsync} 
+                    </MapView>} 
+                        <Text onLayout={this.findCurrentLocationAsync}>
+                        My distance from EP cities
+                        </Text>
+                        {/*
+                        <Text onPress={this.findCurrentLocationAsync} 
                          title = "My distance from EP cities" color="#841584"/>
+                        */}
 
-                        {cityDistance.map(item => (<Text onPress={ (e)=> this.drawPolygon(e, item) } key={item}>{(item)}</Text>))}
+                        {cityDistance.map(item => (<Text onPress={ (e)=> this.drawPolygon(e, item)} key={item}>{(item)}</Text>))}
 
 
                 </View>
@@ -207,7 +207,7 @@ const EpCities = (props) => {
         },
         map: {
           width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
+          height: Dimensions.get('window').height/2,
         },
       });
 

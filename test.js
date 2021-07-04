@@ -634,4 +634,19 @@ const EpCities = (props) => {
     export default FindMe;
 
     
-   
+   /*
+//Returns an array of city lats
+let cityLat = cities.map(item => ( item.lat ));
+//Return an array of city long
+let cityLong = cities.map(item => ( item.lon));
+
+
+//Creates a property EpCities that returns list of city names
+const EpCities = (props) => {
+    return(
+      cities.map((obj) => (
+        <Text key={obj.name}>{obj.name}{' - '}</Text>     
+     ))
+    )
+}
+*/
