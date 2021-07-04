@@ -62,11 +62,13 @@ const EpCities = (props) => {
             };   
             
         findCurrentLocationAsync = async () => {
+            
             let location;
             let permissionStatus = null;
             let curLongLat;
 
             //promise which in this case is Permissions.askAsync fullfills, the value will be returned and saved in status
+            
             let { status } = await Location.requestForegroundPermissionsAsync();
             permissionStatus = status;
             if (permissionStatus !== 'granted'){
@@ -75,12 +77,17 @@ const EpCities = (props) => {
                     });
                     console.log("Permission to access location was denied")
             } else {
-                location = await Location.getCurrentPositionAsync({});
+                
+                location = await Location.getCurrentPositionAsync({
+                    accuracy: Location.Accuracy.Lowest
+                });
                 let curLat = location.coords.latitude;
                 let curLong = location.coords.longitude;
     
                 curLongLat = {latitude: curLat, longitude: curLong}; 
+                
             }
+        
             //Variable that is inserted into state should be globally declared    
             this.setState({ 
                 location,
@@ -156,7 +163,7 @@ const EpCities = (props) => {
 
                 <View>
                     <MapView
-                        
+                     showsUserLocation= {true}  
                      style={styles.map}
                      region={this.state.region}
                      /*
@@ -200,9 +207,11 @@ const EpCities = (props) => {
         },
         map: {
           width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height*0.5,
+          height: Dimensions.get('window').height,
         },
       });
+
+    
    //default means that only FindMe can be exported from this module 
     export default FindMe;
 
