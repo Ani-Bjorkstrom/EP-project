@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import * as appJson from './data.json';
 import { getDistance } from 'geolib';
 import MapView, {Polygon, Polyline} from 'react-native-maps';
-import { event } from 'react-native-reanimated';
+import { event, log } from 'react-native-reanimated';
 
 let cities = appJson.cities;
 
@@ -29,7 +29,6 @@ let longLat = [];
 cities.map(item =>(longLat.push({latitude: item.lat, longitude: item.lon})));
 
 
-//Currently not used
 
 //Returns an array of city lats
 let cityLat = cities.map(item => ( item.lat ));
@@ -53,7 +52,13 @@ const EpCities = (props) => {
             errorMessage: '',
             location: {},
             curLongLat: {},
-            polygon: []            
+            polygon: [],
+            region: {
+                latitude: 59.339475,
+                longitude: 18.005875,
+                latitudeDelta: LATITUD_DELTA,
+                longitudeDelta: LONGITUDE_DELTA,  
+            }            
             };   
             
         findCurrentLocationAsync = async () => {
@@ -83,7 +88,20 @@ const EpCities = (props) => {
                 
                 }) 
         };  
+/*
+        showMap = () => {
 
+            let region = {
+                latitude:
+                longitude:
+                latitudeDelta:
+                longitudeDelta: 
+            }
+            this.setState({
+                region
+            })
+        }
+*/
         drawPolygon = (event, item) => {
             
             let clickedCity = item[0].split(' ')[0];
@@ -93,13 +111,24 @@ const EpCities = (props) => {
             let index = cityName.indexOf(clickedCity);
             console.log(index);
             let polygon = 
-            cities[index].points.split(",").map(item=>({longitude: (item.split(" ")[0]).replace(/['"]+/g, ''), latitude: (item.split(" ")[1]).replace(/['"]+/g, '')}))
+            cities[index].points.split(",").map(item=>({longitude: parseFloat(item.split(" ")[0]), latitude: parseFloat(item.split(" ")[1])}))
+            let lat = cities[index].lat;
+            console.log(lat, long);
+            let long = cities[index].lon;
+            let region = {
+                latitude: lat,
+                longitude: long,
+                latitudeDelta: LATITUD_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            }
             
-            console.log(cities[index].points.split(",").map(item=>({longitude: item.split(" ")[0], latitude: item.split(" ")[1]})));
+            console.log(cities[index].points.split(",").map(item=>({longitude: (item.split(" ")[0]), latitude: (item.split(" ")[1])})));
+            console.log(cities[index].points.split(",").map(item=>({longitude: parseFloat(item.split(" ")[0]), latitude: parseFloat(item.split(" ")[1])})));
 
 
             this.setState({
-                polygon
+                polygon,
+                region
             })
 }
     
@@ -129,23 +158,19 @@ const EpCities = (props) => {
                     <MapView
                         
                      style={styles.map}
-                     
+                     region={this.state.region}
+                     /*
                      initialRegion={{
                         //automate it
-                        latitude: 38.91835,
-                        longitude: -6.345305,
+                        
+                        latitude: 59.339475,
+                        longitude: 18.005875,
                         latitudeDelta: LATITUD_DELTA,
                         longitudeDelta: LONGITUDE_DELTA,  
                       }}
+                      */
                        >
-                         <MapView.Circle
-                            center = {{
-                                latitude: 18.005875,
-                                longtitude: 59.339475,
-                            }}
-                            radius = {50000}
 
-                         /> 
                         <MapView.Polygon coordinates={
                             this.state.polygon
                         } 
@@ -175,7 +200,7 @@ const EpCities = (props) => {
         },
         map: {
           width: Dimensions.get('window').width,
-          height: Dimensions.get('window').height,
+          height: Dimensions.get('window').height*0.5,
         },
       });
    //default means that only FindMe can be exported from this module 
