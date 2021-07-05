@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
+import { Icon } from 'react-native-elements';
+//import Icon from 'react-native-vector-icons/EvilIcons';
 import FindMe from './FindMe';
 
 
@@ -9,28 +11,24 @@ export default class App extends Component {
   
     return (
 
-      <ScrollView>
-    
-        <View style={{justifyContent: 'center'}}>
-
-          <Text style={{color: '#f1287e',
-              fontWeight: 'bold',
-              fontFamily: 'Arial',
-              fontSize: 15,
-              textAlign:'center',
-              paddingTop: 40}}>
-            My distance from EasyPark cities        
-          </Text>
-    
-          <Image
-              source={require('./assets/search.png')}
-              style={{ width: 50, height: 50, alignSelf: 'center', marginTop: 20 }}
-            />
-          <FindMe  />
-        </View>
-  
+      <ScrollView
+      scrollEventThrottle={26}>
+         
+      <FindMe  />
+        
+        
       </ScrollView> 
   ); 
 }
 };
 
+const styles = StyleSheet.create({
+  container: {
+              color: '#f1287e',
+              fontWeight: 'bold',
+              fontFamily: 'Times New Roman',
+              fontSize: 20,
+              justifyContent: 'center',
+              textAlign:'center',
+              paddingTop: 60}
+            });

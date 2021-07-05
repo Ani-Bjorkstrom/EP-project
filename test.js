@@ -225,6 +225,7 @@ import React, { useState, useEffect } from 'react';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import { Component } from 'react/cjs/react.production.min';
 import { styleSheets } from 'min-document';
+import { ImageStore } from 'react-native';
 
 export default class App extends Component {
     render(){
@@ -650,3 +651,30 @@ const EpCities = (props) => {
     )
 }
 */
+
+<Icon
+name='find'
+color='#f1287e' 
+/> 
+
+/*
+Image
+          <Image
+              source={require('./assets/search.png')}
+              style={{ width: 50, height: 50, alignSelf: 'center', marginTop: 20 }}
+            />
+
+*/
+
+<Icon  style={styles.icon}
+            name="location" 
+            type='evilicon' 
+            size={50} 
+            color="#f1287e"
+            paddingTop = {20}
+            
+            />
+
+.push({longitude: 10.37625, latitude: 55.38405});
+
+let polygon = (cities[index].points) ? cities[index].points.split(",").map(item=>({longitude: parseFloat(item.split(" ")[0]), latitude: parseFloat(item.split(" ")[1])})) : ar;
