@@ -129,44 +129,43 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
 
             
             return (
-                
-                <View onLayout={this.getCitiesFromApi}
-                style={styles.container} >
-                    
-                    {/* Show the map only when city name is clicked */}
-                    {this.state.clicked && <MapView 
-                     minZoomLevel={9}
-                     loadingIndicatorColor= { '#606060' }
-                     maxZoomLevel = {16}   
-                     showsUserLocation= { true } 
-                     scrollEnabled={ true }
-                     zoomEnabled={ true }
-                     annotations={ this.state.mapAnnotations }
-                     style={styles.map}
-                    region={this.state.region}>
+               
+                    <View onLayout={this.getCitiesFromApi}
+                    style={styles.container}>
                        
-                        <MapView.Polygon coordinates={
-                            this.state.polygon
-                        } 
-                            fillColor="rgba(0, 200, 0, 0.5)"
-                            strokeColor="#992b82"
-                            strokeWidth={2}
-                            />
-                           
-                    </MapView>} 
-                    
-                        <Text onLayout={this.findCurrentLocationAsync}>
+                        {/* Show the map only when city name is clicked */}
+                        {this.state.clicked && <MapView 
+                        minZoomLevel={9}
+                        loadingIndicatorColor= { '#606060' }
+                        maxZoomLevel = {16}   
+                        showsUserLocation= { true } 
+                        scrollEnabled={ true }
+                        zoomEnabled={ true }
+                        annotations={ this.state.mapAnnotations }
+                        style={styles.map}
+                        region={this.state.region}>
                         
+                            <MapView.Polygon coordinates={
+                                this.state.polygon
+                            } 
+                                fillColor="rgba(0, 200, 0, 0.5)"
+                                strokeColor="#992b82"
+                                strokeWidth={2}
+                                />
+                           
+                        </MapView>} 
+                        <Text onLayout={this.findCurrentLocationAsync}  style={styles.text}>
+                            MY DISTANCE FROM EP CITIES
                         </Text>
-
-                        <Text style={styles.text}>
-            MY DISTANCE FROM EP CITIES        
-          </Text>  
-                        {cityDistance.map(item => (<Text style={styles.container} onPress={ (e)=> this.drawPolygon(e, item)} key={item}>{(item)}</Text>))}
+                        <ScrollView scrollEventThrottle={10}> 
 
 
-                </View>
-                         
+
+                            {cityDistance.map(item => (<Text style={styles.container} onPress={ (e)=> this.drawPolygon(e, item)} key={item}>{(item)}</Text>))}
+
+                        </ScrollView> 
+                        </View> 
+                        
             );
         }
     }
@@ -181,14 +180,15 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily:'Times New Roman',
-          //paddingLeft: 10,
-          paddingRight: 10,
+          paddingLeft: 10,
           marginTop: 5,
+          marginLeft: 5,
           textDecorationLine: 'underline', 
         },
-        //Gets the map window size
+
         map: {
-          flex: 1,
+
+          flex: 0,
           marginTop: 0,
           alignItems: 'center',
           justifyContent: 'center', 
@@ -204,7 +204,7 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
             fontSize: 20,
             justifyContent: 'center',
             textAlign:'center',
-            paddingTop: 40,
+            paddingTop: 50,
             paddingBottom: 20
             
         }

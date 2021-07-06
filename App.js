@@ -11,13 +11,12 @@ export default class App extends Component {
   
     return (
 
-      <ScrollView
-      scrollEventThrottle={26}>
+
          
       <FindMe  />
         
         
-      </ScrollView> 
+      
   ); 
 }
 };
