@@ -140,7 +140,7 @@ import { ScrollView } from 'react-native-gesture-handler';
                             MY DISTANCE FROM EP CITIES
                         </Text>
 
-                        <ScrollView > 
+                        <ScrollView> 
                             {cityDistance.map(item => (<Text style={styles.container} onPress={ (e)=> this.drawPolygon(e, item)} key={item}>{(item)}</Text>))}
                         </ScrollView> 
                     </View> 
@@ -171,8 +171,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center', 
         width: Dimensions.get('window').width*1.06,
-        height: Dimensions.get('window').height*10,   
-    },
+        height: Dimensions.get('window').height*8.3,
+        maxHeight: 300,
+        minWidth: 400
+    },    
 
     text: {
         color: '#f1287e',
@@ -186,8 +188,4 @@ const styles = StyleSheet.create({
     }
 });
 
-    
 export default FindMe;
-
-    
-   
