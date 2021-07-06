@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
-import { Icon } from 'react-native-elements';
-//import Icon from 'react-native-vector-icons/EvilIcons';
+import { StyleSheet } from 'react-native';
 import FindMe from './FindMe';
 
 
@@ -9,14 +7,8 @@ export default class App extends Component {
   
   render(){
   
-    return (
-
-
-         
-      <FindMe  />
-        
-        
-      
+    return (         
+      <FindMe  />            
   ); 
 }
 };

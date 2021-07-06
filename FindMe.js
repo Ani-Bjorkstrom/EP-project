@@ -4,25 +4,11 @@ import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import MapView from 'react-native-maps';
 import { ScrollView } from 'react-native-gesture-handler';
-import Animated, { log } from 'react-native-reanimated';
 
 
-
-const window = Dimensions.get('window');
-console.log(window);
-const { width, height }  = window;
-const LATITUD_DELTA = 0.19992;
-const LONGITUDE_DELTA = LATITUD_DELTA * (width / height)
-console.log(window);
-console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
-
-
-
-//here I use the alternative class suntax
-//creates a class component called FindMe gives the class component a state object, state object can be only created in class constructor
+//Creates a class component called FindMe using alternative class suntax
     class FindMe extends Component {
-        
-        //in states program saves property values that belong to the component, when state object changes component re-renders
+        //In states program saves property values that belong to the component, when state object changes component re-renders
         state = {
             data: [],
             errorMessage: '',
@@ -46,12 +32,11 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
                 }   
 
             findCurrentLocationAsync = async () => {
-                
                 let location;
                 let permissionStatus = null;
                 let curLongLat;
 
-                //promise which in this case is Permissions.askAsync fullfills, the value will be returned and saved in status
+                //Promise which in this case is that Permissions.askAsync fullfills, the value will be returned and saved in status
                 let { status } = await Location.requestForegroundPermissionsAsync();
                 permissionStatus = status;
                 if (permissionStatus !== 'granted'){
@@ -60,27 +45,29 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
                         });
                         console.log("Permission to access location was denied")
                 } else {
-                    
                     location = await Location.getCurrentPositionAsync({
                         accuracy: Location.Accuracy.Lowest
                     });
+
                     let curLat = location.coords.latitude;
                     let curLong = location.coords.longitude;
-        
-                    curLongLat = {latitude: curLat, longitude: curLong}; 
-                    
+                    curLongLat = {latitude: curLat, longitude: curLong};    
                 }
 
                 this.setState({ 
                     location,
-                    curLongLat
-                    
-                    }) 
+                    curLongLat   
+                }) 
             };  
 
 
             drawPolygon = (event, item) => {
                 
+                let window = Dimensions.get('window');
+                let { width, height }  = window;
+                let LATITUD_DELTA = 0.19992;
+                let LONGITUDE_DELTA = LATITUD_DELTA * (width / height);
+
                 let clickedCity = item[0].split(' ')[0];
                 let cities = this.state.data;
                 let cityName = cities.map(item => (item.name.split(" ")[0]));          
@@ -89,7 +76,6 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
                 let long = cities[index].lon;
                 let polygon = (cities[index].points === 'null') ? [{longitude: long, latitude: lat}] :
                 cities[index].points.split(",").map(item=>({longitude: parseFloat(item.split(" ")[0]), latitude: parseFloat(item.split(" ")[1])}));
-
 
                 let region = {
                     latitude: lat,
@@ -103,12 +89,8 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
                     polygon,
                     region,
                     clicked
-                })
-                
+                })   
             }
-        
-        
-
 
         render() {
 
@@ -117,7 +99,7 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
             let cityNames = cities.map(item => ((item.name) + ' -')); 
             let cityDistance = []
             let longLat = [];
-            //Pushes the {latitude: X, longtitude: Y} objects into longLat array which is the compination of five latitudes and longtitues
+            //Pushes the {latitude: X, longtitude: Y} objects into longLat array which is the combination of latitudes and longtitues
             cities.map(item =>(longLat.push({latitude: item.lat, longitude: item.lon})));
             //Creates an array that involves distances
             let distance = longLat.map(item => (getDistance(this.state.curLongLat, item)));
@@ -125,18 +107,16 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
             for (let i = 0; i < distance.length; i++ ){
                 cityDistance.push([cityNames[i] + ' ' + distance[i]/1000 + 'km']);
             }
-
-
-            
+     
             return (
                
-                    <View onLayout={this.getCitiesFromApi}
+                    <View 
+                    onLayout={this.getCitiesFromApi}
                     style={styles.container}>
                        
                         {/* Show the map only when city name is clicked */}
                         {this.state.clicked && <MapView 
                         minZoomLevel={9}
-                        loadingIndicatorColor= { '#606060' }
                         maxZoomLevel = {16}   
                         showsUserLocation= { true } 
                         scrollEnabled={ true }
@@ -151,68 +131,63 @@ console.log(width, height, LATITUD_DELTA, LONGITUDE_DELTA);
                                 fillColor="rgba(0, 200, 0, 0.5)"
                                 strokeColor="#992b82"
                                 strokeWidth={2}
-                                />
-                           
+                                /> 
                         </MapView>} 
-                        <Text onLayout={this.findCurrentLocationAsync}  style={styles.text}>
+
+                        <Text 
+                        onLayout={this.findCurrentLocationAsync}  
+                        style={styles.text}>
                             MY DISTANCE FROM EP CITIES
                         </Text>
-                        <ScrollView scrollEventThrottle={10}> 
 
-
-
+                        <ScrollView > 
                             {cityDistance.map(item => (<Text style={styles.container} onPress={ (e)=> this.drawPolygon(e, item)} key={item}>{(item)}</Text>))}
-
                         </ScrollView> 
-                        </View> 
+                    </View> 
                         
             );
         }
     }
 
-    const styles = StyleSheet.create({
+const styles = StyleSheet.create({
+    container: {
+        fontSize: 20,
+        color: '#992b82',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily:'Times New Roman',
+        paddingLeft: 10,
+        marginTop: 5,
+        marginLeft: 5,
+        textDecorationLine: 'underline', 
+    },
 
-        container: {
-          fontSize: 20,
-          color: '#992b82',
-          flex: 1,
-          backgroundColor: '#fff',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily:'Times New Roman',
-          paddingLeft: 10,
-          marginTop: 5,
-          marginLeft: 5,
-          textDecorationLine: 'underline', 
-        },
+    map: {
 
-        map: {
+        flex: 0,
+        marginTop: 0,
+        alignItems: 'center',
+        justifyContent: 'center', 
+        width: Dimensions.get('window').width*1.06,
+        height: Dimensions.get('window').height*10,   
+    },
 
-          flex: 0,
-          marginTop: 0,
-          alignItems: 'center',
-          justifyContent: 'center', 
-          width: 400,
-          height: 300,
-          
-        },
-
-        text: {
-            color: '#f1287e',
-            fontWeight: 'bold',
-            fontFamily: 'Times New Roman',
-            fontSize: 20,
-            justifyContent: 'center',
-            textAlign:'center',
-            paddingTop: 50,
-            paddingBottom: 20
-            
-        }
-      });
+    text: {
+        color: '#f1287e',
+        fontWeight: 'bold',
+        fontFamily: 'Times New Roman',
+        fontSize: 20,
+        justifyContent: 'center',
+        textAlign:'center',
+        paddingTop: 50,
+        paddingBottom: 20    
+    }
+});
 
     
-   //default means that only FindMe can be exported from this module 
-    export default FindMe;
+export default FindMe;
 
     
    
