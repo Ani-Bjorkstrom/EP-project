@@ -1,12 +1,15 @@
+//Bundling all of React's source code
 import React, { Component } from 'react';
+//React native uses React.js therefore both should be imported
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import MapView from 'react-native-maps';
+//react-native-gesture-handler utilizes platforms native touch system instead of relying on the JS responder system.
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-//Creates a class component called FindMe using alternative class suntax
+//Creates a class component called FindMe using alternative class syntax 
     class FindMe extends Component {
         //In states program saves property values that belong to the component, when state object changes component re-renders
         state = {
@@ -16,11 +19,15 @@ import { ScrollView } from 'react-native-gesture-handler';
             curLongLat: {},
             polygon: [],
             clicked: false,
-            region: {}            
+            region: {},
+            isLoading: false,
+            cityDistance: []            
             };   
             
+
             getCitiesFromApi = () => {
                 return fetch('https://pgroute-staging.easyparksystem.net/cities')
+                    //parsing the body text as json
                     .then((response) => response.json())
                     .then((json) => {
                     this.setState({data: json.cities});
@@ -36,15 +43,16 @@ import { ScrollView } from 'react-native-gesture-handler';
                 let permissionStatus = null;
                 let curLongLat;
 
-                //Promise which in this case is that Permissions.askAsync fullfills, the value will be returned and saved in status
-                let { status } = await Location.requestForegroundPermissionsAsync();
+                //Promise which in this case is that PermissionsAsync fullfills, the value will be returned and saved in status
+                let { status } = Location.requestForegroundPermissionsAsync();
                 permissionStatus = status;
                 if (permissionStatus !== 'granted'){
                     this.setState({
                         errorMessage: 'Permission to access location was denied'
                         });
                         console.log("Permission to access location was denied")
-                } else {
+                } 
+                    //Pauses the code on this line until the promise fulfills: status is equal to granted                        
                     location = await Location.getCurrentPositionAsync({
                         accuracy: Location.Accuracy.Lowest
                     });
@@ -52,7 +60,7 @@ import { ScrollView } from 'react-native-gesture-handler';
                     let curLat = location.coords.latitude;
                     let curLong = location.coords.longitude;
                     curLongLat = {latitude: curLat, longitude: curLong};    
-                }
+                
 
                 this.setState({ 
                     location,
@@ -67,13 +75,17 @@ import { ScrollView } from 'react-native-gesture-handler';
                 let { width, height }  = window;
                 let LATITUD_DELTA = 0.19992;
                 let LONGITUDE_DELTA = LATITUD_DELTA * (width / height);
-
+                //Item is an array and split is a method of string, therfore first value of an array is used to convert it to a string
+                //split method seperate string based on space and returns an array. For getting the first item 0 index is used
                 let clickedCity = item[0].split(' ')[0];
+                //defined it twice 
                 let cities = this.state.data;
+                //CityName is an array that consiste of the first name of the cities
                 let cityName = cities.map(item => (item.name.split(" ")[0]));          
                 let index = cityName.indexOf(clickedCity);
                 let lat = cities[index].lat;
                 let long = cities[index].lon;
+                //Points for Odense equals to null
                 let polygon = (cities[index].points === 'null') ? [{longitude: long, latitude: lat}] :
                 cities[index].points.split(",").map(item=>({longitude: parseFloat(item.split(" ")[0]), latitude: parseFloat(item.split(" ")[1])}));
 
@@ -91,15 +103,16 @@ import { ScrollView } from 'react-native-gesture-handler';
                     clicked
                 })   
             }
-
-        render() {
-
-            //Creates an empathy array
+            /*
+            cityDistance = () => {
+            //cities is an array that involves object containing the data
             let cities = this.state.data;
+            //cityNames is an array that involves cities name and dush
             let cityNames = cities.map(item => ((item.name) + ' -')); 
             let cityDistance = []
             let longLat = [];
             //Pushes the {latitude: X, longtitude: Y} objects into longLat array which is the combination of latitudes and longtitues
+            //longLat is an array that involves objects with lat and long values
             cities.map(item =>(longLat.push({latitude: item.lat, longitude: item.lon})));
             //Creates an array that involves distances
             let distance = longLat.map(item => (getDistance(this.state.curLongLat, item)));
@@ -107,9 +120,32 @@ import { ScrollView } from 'react-native-gesture-handler';
             for (let i = 0; i < distance.length; i++ ){
                 cityDistance.push([cityNames[i] + ' ' + distance[i]/1000 + 'km']);
             }
-     
+            this.setState({
+                    cityDistance
+                })
+
+            }
+            */
+        render() {
+        
+            //cities is an array that involves object containing the data
+            let cities = this.state.data;
+            //cityNames is an array that involves cities name and dush
+            let cityNames = cities.map(item => ((item.name) + ' -')); 
+            let cityDistance = []
+            let longLat = [];
+            //Pushes the {latitude: X, longtitude: Y} objects into longLat array which is the combination of latitudes and longtitues
+            //longLat is an array that involves objects with lat and long values
+            cities.map(item =>(longLat.push({latitude: item.lat, longitude: item.lon})));
+            //Creates an array that involves distances
+            let distance = longLat.map(item => (getDistance(this.state.curLongLat, item)));
+            //Returns an array that consists of arrays that includes city name and distance from the current location
+            for (let i = 0; i < distance.length; i++ ){
+                cityDistance.push([cityNames[i] + ' ' + distance[i]/1000 + 'km']);
+            }
+            
             return (
-               
+        
                     <View 
                     onLayout={this.getCitiesFromApi}
                     style={styles.container}>
